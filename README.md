@@ -1,4 +1,18 @@
-# TRL - Transformer Reinforcement Learning
+# TRL for rec usage
+## using vllm (2 times faster)
+```
+bash start_vllm.sh
+bash rec_grpo.sh
+```
+## not using vllm
+First, comment or remove `--use-vllm` in `rec_grpo.sh`. Then
+```
+bash rec_grpo.sh
+```
+rec usages mainly in `rec_utils/*`
+
+
+# (Original README) TRL - Transformer Reinforcement Learning
 
 <div style="text-align: center">
     <img src="https://huggingface.co/datasets/trl-lib/documentation-images/resolve/main/trl_banner_dark.png" alt="TRL Banner">

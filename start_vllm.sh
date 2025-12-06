@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0,1,2,3 trl vllm-serve --model /mnt/shared-storage-user/p1-shared/luotianwei/hf_cache/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1 --tensor-parallel-size 2 --data-parallel-size 2
