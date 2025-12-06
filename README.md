@@ -9,7 +9,7 @@ First, comment or remove `--use-vllm` in `rec_grpo.sh`. Then
 ```
 bash rec_grpo.sh
 ```
-rec usages mainly in `rec_utils/*`
+Rec usages are mainly in `rec_utils/*`
 
 
 # (Original README) TRL - Transformer Reinforcement Learning
