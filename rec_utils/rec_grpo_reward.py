@@ -7,15 +7,43 @@ from typing import List, Dict, Optional
 RANKING_PATTERN = re.compile(r"RANKING\s*:\s*([0-9,\s]+)", re.IGNORECASE)
 
 
-def _extract_contents(completions: List[List[Dict[str, str]]]) -> List[str]:
-    """把 chat completion 结构抽成纯文本 content。"""
+def _extract_contents(completions: List) -> List[str]:
+    """把各种 completion 结构抽成纯文本 content。
+
+    支持：
+    - List[List[{"role":..., "content":...}]]  （训练时原生格式）
+    - List[{"role":..., "content":...}]
+    - List[str]
+    - List[List[str]]
+    """
     contents: List[str] = []
     for msgs in completions:
+        # 空的情况
         if not msgs:
             contents.append("")
             continue
-        # 通常 GRPO 每个 completion 只有一条 assistant message
-        contents.append(msgs[0].get("content", "") or "")
+
+        # 1) 直接就是一个字符串：["...","..."] 或 completions=["..."]
+        if isinstance(msgs, str):
+            contents.append(msgs)
+            continue
+
+        # 2) 直接就是一个 dict：{"role":..., "content":...}
+        if isinstance(msgs, dict):
+            contents.append(msgs.get("content", "") or "")
+            continue
+
+        # 3) 其他情况，假定是 list[...]，取第一个元素
+        first = msgs[0]
+
+        if isinstance(first, dict):
+            contents.append(first.get("content", "") or "")
+        elif isinstance(first, str):
+            contents.append(first)
+        else:
+            # 实在不知道是啥，就直接转成字符串
+            contents.append(str(first))
+
     return contents
 
 

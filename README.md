@@ -1,15 +1,21 @@
 # TRL for rec usage
-## using vllm (2 times faster)
+## Training
+### using vllm (2 times faster)
 ```
 bash start_vllm.sh
 bash rec_grpo.sh
 ```
-## not using vllm
+### not using vllm
 First, comment or remove `--use-vllm` in `rec_grpo.sh`. Then
 ```
 bash rec_grpo.sh
 ```
 Rec usages are mainly in `rec_utils/*`
+
+## Evaluation
+```
+bash rec_eval.sh
+```
 
 
 # (Original README) TRL - Transformer Reinforcement Learning

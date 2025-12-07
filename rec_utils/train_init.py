@@ -29,8 +29,8 @@ Contains purchase times, purchased items, and ratings (out of 5).
 
 # INSTRUCTION
 Your response must end with exactly one line in this format:
-RANKING: number1,number2,number3,number4,number5,number6,number7,number8,number9,number10
-Example:\nRANKING: 2, 6, 5, 4, 7, 1, 3, 8, 10, 9
+RANKING: number1,number2,number3,number4,number5
+Example:\nRANKING:  2, 4, 5, 1, 3
 """
 
 # =========================
