@@ -28,9 +28,25 @@ Contains purchase times, purchased items, and ratings (out of 5).
 {candidates_text}
 
 # INSTRUCTION
-Your response must end with exactly one line in this format:
+You MUST respond with the following format:
+
+<think>
+Write your reasoning here.
+</think>
+<answer>
 RANKING: number1,number2,number3,number4,number5
-Example:\nRANKING:  2, 4, 5, 1, 3
+</answer>
+
+Rules:
+- The <answer> must contain exactly ONE line starting with "RANKING:".
+- The ranking must be a permutation of 1..5 with no repeats.
+- Do not output anything outside the <think> and <answer> tags.
+
+Example:
+<think>...</think>
+<answer>
+RANKING: 2, 4, 5, 1, 3
+</answer>
 """
 
 # =========================
@@ -82,7 +98,7 @@ def build_item_text(item: Dict[str, Any], idx: int) -> str:
 
 def build_candidates_text(candidates: List[Dict[str, Any]]) -> str:
     """构建所有候选物品的文本"""
-    return "\n".join(build_item_text(c, i) for i, c in enumerate(candidates))
+    return "\n".join(build_item_text(c, i) for i, c in enumerate(candidates, start=1))
 
 
 # =========================
