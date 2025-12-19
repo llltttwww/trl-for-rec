@@ -4,7 +4,7 @@ unset http_proxy
 unset https_proxy
 
 python rec_eval.py \
-  --model_dir /mnt/shared-storage-user/p1-shared/luotianwei/hf_cache/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1 \
+  --model_dir /mnt/shared-storage-user/p1-shared/luotianwei/trl-for-rec/rec_checkpoints_new/checkpoint-2000 \
   --dataset_path /mnt/shared-storage-user/p1-shared/luotianwei/trl-for-rec/data/Musical_Instruments_0_2022-10-2023-10 \
   --split test \
   --K 5 \

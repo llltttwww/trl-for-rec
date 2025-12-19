@@ -1,0 +1,44 @@
+You are a recommendation assistant. Based on the user's purchase history, rank the candidate items by how likely the user would want to buy them.
+
+# USER HISTORY
+Contains purchase times, purchased items, and ratings (out of 5).
+450d 5.1h ago: [On Stage MC7201 Round Base Microphone Stand - (Chrome)] (5.0)
+402d 19.5h ago: [JIM DUNLOP 1.0mm Big Stubby Guitar Picks, 24-Pack] (5.0)
+80d 23.5h ago: [(4x) Bourns 500K SHORT SPLIT Shaft Audio Potentiometers + (2x) .022uf Orange Drop Capacitors - For Electric Guitar] (5.0)
+51d 2.5h ago: [Set of Four (4X) Bourns 500K SHORT Split Shaft Audio Taper Low Friction Potentiometers] (5.0)
+49d 21.0h ago: [Dopro 2pcs Black with White Pearl Cap Guitar Dome Knobs for Tele Telecaster Set Screw Guitar Bass Knob] (5.0)
+49d 21.0h ago: [DaierTek 3 Way Guitar Toggle Switch Pickup Selector for Gibson Epiphone Les Paul Electric Guitar (Black Tip)] (5.0)
+
+# CANDIDATE ITEMS
+Each candidate has an ID=1..5. The ID is used in your output.
+ID=1 | MOOER Sweeper Dynamic Envelope Filter Pedal for both bass and guitar | Rating: 4.2 | Buyers: 221
+    Description: Dynamic envelope filter pedal unique funky style filter tone for both bass and guitar
+ID=2 | Milisten 2PCS Humbucker Pickup Ring Frame Mounting Ring For Electric Guitars GB301 Golden | Rating: 4.5 | Buyers: 20
+    Description: 2PCS Humbucker Pickup Ring Frame Mounting Ring For Electric Guitars GB301 Golden Package Including Features Not Includes springs and mounting screws.With high quality and durable performance.Easy and ...
+ID=3 | Graphtech Saddle for acoustic guitars, Right, Full Size (PQ-9100-00) | Rating: 4.7 | Buyers: 32
+    Description: GRAPH TECH TUSQ SADDLE PQ-9100-00 – ACOUSTIC SADDLE: The PQ-9100-00 is a great option to upgrade or replace the saddle on your Martin (f.e) acoustic guitar. It is pre-shaped for a quick and simple ins...
+ID=4 | L g re Reeds Premium Synthetic Woodwind Reed, Bb Clarinet, Classic, Strength 2.50 (BB2.50) | Rating: 4.6 | Buyers: 846
+    Description: 
+ID=5 | Fender Standard Series Precision Bass Body, Alder, Arctic White | Rating: 4.7 | Buyers: 36
+    Description: Genuine Fender Precision Bass guitar alder body routed for a traditional split single-coil pickup and pre-drilled with three bridge-mounting screw holes and bridge ground wire channel. Durable gloss-p...
+
+# TASK
+You must output a ranking of the candidates above.
+
+Interpretation:
+- The output is a ranking of the CANDIDATE ITEMS above.
+- The 1st digit is the MOST likely item to buy, and the 5th digit is the LEAST likely.
+- Digit k refers to the candidate with ID=k.
+
+# OUTPUT FORMAT
+Output ONLY 5 digits, concatenated with no spaces or newlines:
+?????
+
+Rules:
+- Each digit must be one of: 1 2 3 4 5
+- The 5 digits must be a permutation of 12345 with no repeats.
+- Do NOT output any other text.
+
+Example:
+24513
+

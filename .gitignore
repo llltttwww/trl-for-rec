@@ -153,3 +153,6 @@ flash_attn-*
 data
 
 logs
+
+rec_checkpoints_new
+rec_checkpoints_pl

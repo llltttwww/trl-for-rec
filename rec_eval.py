@@ -12,7 +12,7 @@ from rec_utils.rec_grpo_data import build_rec_hf_dataset
 from rec_utils.rec_grpo_reward import (
     format_reward_rec,
     ndcg_reward_rec,
-    _parse_ranking,
+    _parse_ranking_from_answer,
     _normalize_ranking_1_to_0_based,
 )
 
@@ -279,7 +279,7 @@ def evaluate_checkpoint(
             all_ndcg_rewards.append(0.0 if ndcg is None else float(ndcg))
 
             # Hit@1
-            ranking_1 = _parse_ranking(text)
+            ranking_1 = _parse_ranking_from_answer(text)
             hit1 = 0.0
             try:
                 pos_idx = int(sol)

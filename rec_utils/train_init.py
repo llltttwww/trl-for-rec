@@ -49,6 +49,39 @@ RANKING: 2, 4, 5, 1, 3
 </answer>
 """
 
+RANKING_PROMPT_TMPL_PL_GRPO = """You are a recommendation assistant. Based on the user's purchase history, rank the candidate items by how likely the user would want to buy them.
+
+# USER HISTORY
+Contains purchase times, purchased items, and ratings (out of 5).
+{user_text}
+
+# CANDIDATE ITEMS
+Each candidate has an ID=1..5. The ID is used in your output.
+{candidates_text}
+
+# TASK
+You must output a ranking of the candidates above.
+
+Interpretation:
+- The output is a ranking of the CANDIDATE ITEMS above.
+- The 1st digit is the MOST likely item to buy, and the 5th digit is the LEAST likely.
+- Digit k refers to the candidate with ID=k.
+
+# OUTPUT FORMAT
+Output ONLY 5 digits, concatenated with no spaces or newlines:
+?????
+
+Rules:
+- Each digit must be one of: 1 2 3 4 5
+- The 5 digits must be a permutation of 12345 with no repeats.
+- Do NOT output any other text.
+
+Example:
+24513
+
+"""
+
+
 # =========================
 # 文本构建函数
 # =========================
@@ -87,18 +120,23 @@ def build_user_text(sequence: Dict[str, Any], id2title: Dict[int, str], win_size
     return "\n".join(lines)
 
 
-def build_item_text(item: Dict[str, Any], idx: int) -> str:
+def build_item_text(item: Dict[str, Any], idx: int, pl_grpo=False) -> str:
     """构建单个候选物品文本（带编号）"""
     title = item.get("title") or item.get("item_title") or "Unknown Item"
     desc = item.get("description", "")
     if isinstance(desc, list):
         desc = " ".join(desc[::-1]) if desc else ""
+    if pl_grpo:
+        return (
+            f"ID={idx} | {title} | Rating: {item.get('average_rating', 0):.1f} | Buyers: {item.get('rating_number', 0)}\n"
+            f"    Description: {desc[:200]}{'...' if len(desc) > 200 else ''}"
+        )
     return f"[{idx}] {title} | Rating: {item.get('average_rating', 0):.1f} | Buyers: {item.get('rating_number', 0)}\n    Description: {desc[:200]}{'...' if len(desc) > 200 else ''}"
 
 
-def build_candidates_text(candidates: List[Dict[str, Any]]) -> str:
+def build_candidates_text(candidates: List[Dict[str, Any]], pl_grpo=False) -> str:
     """构建所有候选物品的文本"""
-    return "\n".join(build_item_text(c, i) for i, c in enumerate(candidates, start=1))
+    return "\n".join(build_item_text(c, i, pl_grpo) for i, c in enumerate(candidates, start=1))
 
 
 # =========================
@@ -112,11 +150,12 @@ class RankingPrompter:
         self.tok = tokenizer
 
     def build_prompt(self, user_text: str, candidates: List[Dict[str, Any]], 
-                    apply_chat_template: bool = True) -> str:
+                    apply_chat_template: bool = True, pl_grpo=False) -> str:
         """构建排序prompt"""
-        raw = RANKING_PROMPT_TMPL.format(
+        ranking_prompt_tmpl=RANKING_PROMPT_TMPL if not pl_grpo else RANKING_PROMPT_TMPL_PL_GRPO
+        raw = ranking_prompt_tmpl.format(
             user_text=user_text,
-            candidates_text=build_candidates_text(candidates)
+            candidates_text=build_candidates_text(candidates, pl_grpo)
         )
         if apply_chat_template and self.tok and hasattr(self.tok, "apply_chat_template"):
             return self.tok.apply_chat_template(

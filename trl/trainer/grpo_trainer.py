@@ -46,6 +46,7 @@ from transformers import (
     is_bitsandbytes_available,
     is_trackio_available,
     is_wandb_available,
+    LogitsProcessorList,
 )
 from transformers.trainer_utils import seed_worker
 from transformers.utils import is_datasets_available, is_peft_available, is_rich_available
@@ -457,6 +458,8 @@ class GRPOTrainer(BaseTrainer):
         # suppress this warning, we set the "estimate_tokens" key in the model's "warnings_issued" dictionary to True.
         # This acts as a flag to indicate that the warning has already been issued.
         model.warnings_issued["estimate_tokens"] = True
+        
+        self.extra_logits_processor: LogitsProcessorList | None = None
 
         super().__init__(
             model=model,
@@ -1420,6 +1423,9 @@ class GRPOTrainer(BaseTrainer):
             else:
                 generate_inputs = self.processing_class(text=prompts, **processor_kwargs)
             generate_inputs = super()._prepare_inputs(generate_inputs)
+            extra_lp = getattr(self, "extra_logits_processor", None)
+            if callable(extra_lp):
+                extra_lp = extra_lp()
 
             with (
                 profiling_context(self, "transformers.generate"),
@@ -1430,7 +1436,8 @@ class GRPOTrainer(BaseTrainer):
                 FSDP.summon_full_params(self.model_wrapped, recurse=False) if self.is_fsdp_enabled else nullcontext(),
             ):
                 prompt_completion_ids = unwrapped_model.generate(
-                    **generate_inputs, generation_config=self.generation_config, disable_compile=True
+                    **generate_inputs, generation_config=self.generation_config, disable_compile=True,
+                    logits_processor=extra_lp,
                 )
             # Compute prompt length and extract completion ids
             prompt_ids, prompt_mask = generate_inputs["input_ids"], generate_inputs["attention_mask"]
@@ -1485,6 +1492,15 @@ class GRPOTrainer(BaseTrainer):
         self._metrics[mode]["completions/mean_terminated_length"].append(term_completion_lengths.float().mean().item())
         self._metrics[mode]["completions/min_terminated_length"].append(term_completion_lengths.float().min().item())
         self._metrics[mode]["completions/max_terminated_length"].append(term_completion_lengths.float().max().item())
+        
+        # ## debug
+        # rank = int(os.environ.get("RANK", os.environ.get("LOCAL_RANK", "0")))
+        # if rank==0:
+        #     prompt=self.tokenizer.decode(prompt_ids[0])
+        #     completion=self.tokenizer.decode(completion_ids[0])
+        #     print(f"#####Prompt\n{prompt}#####")
+        #     print(f"#####Completion\n{completion}#####")
+        
 
         return prompt_ids, completion_ids, total_completion_tokens, logprobs, extra_fields
 

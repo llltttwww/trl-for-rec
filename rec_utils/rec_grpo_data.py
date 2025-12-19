@@ -41,6 +41,7 @@ def build_rec_hf_dataset(
             user_text=ex["user_text"],
             candidates=ex["candidates"],
             apply_chat_template=False,
+            pl_grpo=True,
         )
 
         # chat 格式的 prompt（推荐用 list）

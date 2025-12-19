@@ -1,39 +1,39 @@
-'You are a recommendation assistant. Based on the user\'s purchase history, rank the candidate items by how likely the user would want to buy them.
+You are a recommendation assistant. Based on the user's purchase history, rank the candidate items by how likely the user would want to buy them.
 
 # USER HISTORY
 Contains purchase times, purchased items, and ratings (out of 5).
-2.2min ago: [CAHAYA Guitar Stand Wood Universal Wooden Guitar Stand for Dreadnought Acoustic Classical Electric Bass Guitars CY0228] (5.0)
+246d 17.1h ago: [HILL The Original Peg Compound (HILL-ZW-97)] (4.0)
+246d 17.0h ago: [D'Addario Violin Rosin - Cello Rosin - Kaplan Premium Rosin with Case, Dark - KRDD] (5.0)
 
 # CANDIDATE ITEMS
-[1] Lexicon Multi-Channel Desktop Recording Studio, 2x2x2 (2-Input, 2-Bus, 2-Output) (Alpha) | Rating: 4.3 | Buyers: 1019
-    Description: RF-filtered and TRS balanced Line outputs for speaker monitoring. Microphone Inputs (1) Female XLR Pin 2 Hot Input Impedance 600 ohms balanced Phantom Power No GAIN +50 dB EIN -115dB A-weighted @50dB ...
-[2] WINGO Guitar Capo for Acoustic and Electric Guitars - Rosewood Color with 5 Picks | Rating: 4.8 | Buyers: 36426
-    Description: 
-[3] Graphtech Saddle for acoustic guitars, Right, Full Size (PQ-9100-00) | Rating: 4.7 | Buyers: 32
-    Description: GRAPH TECH TUSQ SADDLE PQ-9100-00 – ACOUSTIC SADDLE: The PQ-9100-00 is a great option to upgrade or replace the saddle on your Martin (f.e) acoustic guitar. It is pre-shaped for a quick and simple ins...
-[4] KAISH 4pcs Blue with White Number Guitar Speed Dial Knobs Control Knob fits LP Guitar | Rating: 4.6 | Buyers: 12
-    Description: Set of 4 after-market Guitar Knobs; Fits Metric Les Paul Guitars with 6mm diameter Pots
-[5] Audio2000\'s C27003P2 3 Feet 1/4" TS Right Angle To 1/4" TS Right Angle Cable (2 Pack) | Rating: 4.5 | Buyers: 110
-    Description: The Audio2000\'S C27003P2 two-pack gold-plated 1/4-inch TS right angle to gold-plated 1/4-inch TS right-angle cables are high quality professional audio/recording/patch/instrument cables. The total len...
+Each candidate has an ID=1..5. The ID is used in your output.
+ID=1 | Yamaha YRS-24B Plastic Soprano Recorder, Natural 14.00 x 2.00 x 2.00 | Rating: 4.7 | Buyers: 26554
+    Description: This inexpensive 13-inch recorder has surprisingly good sound quality. The cream-colored, plastic instrument easily disassembles into three parts and comes with a canvas carrying bag, simple instructi...
+ID=2 | Northern Lutherie LLC - Blueberry Pi (Upright Bass Pickup) USA Made | Rating: 4.1 | Buyers: 47
+    Description: At Northern Lutherie our passion is to make your string instrument be heard! And we strongly believe we produce the absolute best sounding piezo electronic pickup on the market at the most affordable ...
+ID=3 | KAISH Red ST Strat Pickup Covers Knobs and 5 Way Switch Tip Cap | Rating: 4.0 | Buyers: 417
+    Description: These are after-market parts, not original parts!
+ID=4 | Behringer SL 75C Dynamic Cardioid Microphone,XLR | Rating: 4.6 | Buyers: 669
+    Description: Dynamic cardioid microphone
+ID=5 | US Blues P3-TWRS Tone Woods Indian Rosewood Guitar Picks Brown Medium | Rating: 4.6 | Buyers: 161
+    Description: This Pack of 3 Artist Quality Indian Rosewood Guitar Picks is recommended for acoustic and acoustic electric guitar. Our Indian Rosewood is a medium brown wood with honey streaks and an even grain. In...
 
-# INSTRUCTION
-You MUST respond with the following format:
+# TASK
+You must output a ranking of the candidates above.
 
-<think>
-Write your reasoning here.
-</think>
-<answer>
-RANKING: number1,number2,number3,number4,number5
-</answer>
+Interpretation:
+- The output is a ranking of the CANDIDATE ITEMS above.
+- The 1st digit is the MOST likely item to buy, and the 5th digit is the LEAST likely.
+- Digit k refers to the candidate with ID=k.
+
+# OUTPUT FORMAT
+Output ONLY 5 digits, concatenated with no spaces or newlines:
+?????
 
 Rules:
-- The <answer> must contain exactly ONE line starting with "RANKING:".
-- The ranking must be a permutation of 1..5 with no repeats.
-- Do not output anything outside the <think> and <answer> tags.
+- Each digit must be one of: 1 2 3 4 5
+- The 5 digits must be a permutation of 12345 with no repeats.
+- Do NOT output any other text.
 
 Example:
-<think>...</think>
-<answer>
-RANKING: 2, 4, 5, 1, 3
-</answer>
-'
+24513
